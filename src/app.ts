@@ -21,8 +21,6 @@ router.get(
   NotesController.postNotes
 );
 
-router.get("/api/v1/dashboard/:pageNumber", AlertController.getAlertsList);
-
 router.get("/api/v1/get_alerts_list", AlertController.getAlertsList);
 
 app.use(router);

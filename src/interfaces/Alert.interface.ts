@@ -2,15 +2,14 @@ import mongoose from "mongoose";
 import { AlertStatus } from "../controllers/utils/AlertStatus";
 
 export interface AlertInterface {
-  patternId: number;
+  patternId: string;
   patternName: string;
-  chartDates: Date[];
-  chartPressures: Number[];
   date: Date;
   location: string;
   regulator: string;
-  notes: mongoose.Types.ObjectId[];
+  // notes: mongoose.Types.ObjectId[];
   status: AlertStatus;
+  preview: string;
 }
 
 export interface AlertInterfaceList {

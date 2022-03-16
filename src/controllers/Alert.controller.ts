@@ -17,7 +17,6 @@ class Alert extends BaseController {
   ) => {
     return this.makeRequest(
       async () => {
-        const pageNumber = parseInt(req.params.pageNumber);
         //Fetches a list of alerts
         const cleanedSortedAlertsList: AlertInterface[] = await AlertModel.find(
           {
@@ -30,7 +29,6 @@ class Alert extends BaseController {
             },
           }
         ).sort("date");
-        cleanedSortedAlertsList.slice(pageNumber - 10, pageNumber);
 
         return {
           data: cleanedSortedAlertsList,
@@ -67,8 +65,8 @@ class Alert extends BaseController {
       dates.push(elem.DateTime);
       pressures.push(elem.Pressure);
     });
-    let res = { dates: dates, pressures: pressures };
-    return res;
+    let datePressure = { dates: dates, pressures: pressures };
+    return datePressure;
   };
 }
 

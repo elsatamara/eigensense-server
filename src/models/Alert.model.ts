@@ -6,13 +6,12 @@ import { AlertInterface } from "../interfaces/Alert.interface";
 const alertSchema = new Schema<AlertInterface>({
   patternName: String,
   patternId: String,
-  chartDates: [Date],
-  chartPressures: [Number],
   date: Date,
   location: String,
   regulator: String,
-  notes: [mongoose.Types.ObjectId],
+  // notes: [mongoose.Types.ObjectId],
   status: String,
+  preview: String,
 });
 
 const AlertModel = model<AlertInterface>("alertdemos", alertSchema);

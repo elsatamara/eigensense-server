@@ -44,7 +44,7 @@ class Notes extends BaseController {
   ) => {
     let alertToUpdate = await AlertModel.findOne({ alertID: alertID });
     if (alertToUpdate) {
-      alertToUpdate.notes.push(noteID);
+      // alertToUpdate.notes.push(noteID);
       await alertToUpdate.save();
     } else {
       throw new Error("No Alert ID found to be updated");
