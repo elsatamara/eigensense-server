@@ -3,14 +3,13 @@ import { Schema, model } from "mongoose";
 import { NotesInterface } from "../interfaces/Note.interface";
 
 const noteDataSchema = new Schema<NotesInterface>({
-  objectID: mongoose.Types.ObjectId,
-  alertID: mongoose.Types.ObjectId,
-  notesData: String,
-  sessionID: mongoose.Types.ObjectId,
-  agentID: mongoose.Types.ObjectId,
-  createdAt: Date,
+  notesId: String,
+  agentId: String,
+  date: String,
+  text: String,
+  patternId: String,
 });
 
-const NotesDataModel = model<NotesInterface>("NotesData", noteDataSchema);
+const NotesDataModel = model<NotesInterface>("notesdatas", noteDataSchema);
 
 export default NotesDataModel;

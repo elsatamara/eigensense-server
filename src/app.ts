@@ -17,11 +17,19 @@ app.get("/", (req, res) => {
 });
 
 router.get(
-  "/api/v1/post_notes/:sessionID/:agentID/:notesData",
+  `/api/v1/postNotes/:patternId/:notesId/:date/:agent/:text`,
   NotesController.postNotes
 );
 
+router.get(`/api/v1/deleteNote/:noteId/:patternId`, NotesController.deleteNote);
+
 router.get("/api/v1/get_alerts_list", AlertController.getAlertsList);
+router.get("/api/v1/getNotes/:patternId", NotesController.getNotes);
+
+router.get(
+  `/api/v1/updateNote/:noteId/:text/:date`,
+  NotesController.updateNote
+);
 
 app.use(router);
 

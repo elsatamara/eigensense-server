@@ -7,7 +7,7 @@ export interface AlertInterface {
   date: Date;
   location: string;
   regulator: string;
-  // notes: mongoose.Types.ObjectId[];
+  notes: string[];
   status: AlertStatus;
   preview: string;
 }

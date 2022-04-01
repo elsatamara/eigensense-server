@@ -9,7 +9,7 @@ const alertSchema = new Schema<AlertInterface>({
   date: Date,
   location: String,
   regulator: String,
-  // notes: [mongoose.Types.ObjectId],
+  notes: [String],
   status: String,
   preview: String,
 });
