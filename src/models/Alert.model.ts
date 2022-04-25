@@ -4,14 +4,19 @@ import { AlertStatus } from "../controllers/utils/AlertStatus";
 import { AlertInterface } from "../interfaces/Alert.interface";
 
 const alertSchema = new Schema<AlertInterface>({
-  patternName: String,
+  alertType: String,
+  keyAttribute: String,
+  alertQueue: String,
+  agentName: String,
   patternId: String,
+  patternName: String,
   date: Date,
   location: String,
   regulator: String,
-  notes: [String],
   status: String,
   preview: String,
+  dateLastOpened: Date,
+  notes: [String],
 });
 
 const AlertModel = model<AlertInterface>("alertdemos", alertSchema);

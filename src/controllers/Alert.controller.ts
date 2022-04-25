@@ -59,6 +59,7 @@ class Alert extends BaseController {
         $lte: currDate.toJSON().slice(0, 10),
       },
     });
+    console.log(objectArray);
     let dates: Date[] = [];
     let pressures: Number[] = [];
     objectArray.forEach((elem) => {
