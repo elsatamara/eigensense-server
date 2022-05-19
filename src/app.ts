@@ -5,6 +5,8 @@ import cors from "cors";
 import NotesController from "./controllers/Notes.controller";
 import AgentController from "./controllers/Agent.controller";
 import ChartController from "./controllers/Chart.controller";
+import NotificationController from "./controllers/Notification.controller";
+import CustomFilterController from "./controllers/CustomFilter.controller";
 
 connectDB();
 
@@ -37,8 +39,46 @@ router.get(
   NotesController.updateNote
 );
 
-router.get(`/api/v1/getchartdemo`, ChartController.getChartDemo);
-router.get(`/api/v1/getanotherchartdemo`, ChartController.getAnotherChartDemo);
+router.get(
+  `/api/v1/change_status/:change_status_object`,
+  AlertController.changeAlertStatus
+);
+
+router.get(
+  `/api/v1/get_notification_list`,
+  NotificationController.getNotificationList
+);
+
+router.get(
+  `/api/v1/mark_important/:alertId`,
+  NotificationController.markAsImportant
+);
+
+router.get(
+  `/api/v1/mark_unimportant/:alertId`,
+  NotificationController.markAsUnimportant
+);
+
+router.get(`/api/v1/mark_read/:alertId`, NotificationController.markRead);
+
+router.get(`/api/v1/mark_unread/:alertId`, NotificationController.markUnread);
+
+router.get(`/api/v1/get_agent_list`, AgentController.getAgentList);
+
+router.get(
+  `/api/v1/get_custom_filter_list`,
+  CustomFilterController.getCustomFilterList
+);
+
+router.get(
+  `/api/v1/delete_custom_filter/:name`,
+  CustomFilterController.deleteFilter
+);
+
+router.get(
+  `/api/v1/post_new_filter/:name/:location/:agent/:queue/:status/:type/:from/:to`,
+  CustomFilterController.postNewFilter
+);
 
 app.use(router);
 

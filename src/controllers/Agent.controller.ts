@@ -1,6 +1,7 @@
 import BaseController from "./Base.controller";
 import e, { Request, Response, NextFunction } from "express";
 import AgentModel from "../models/Agent.model";
+import { AgentInterface } from "../interfaces/Agent.interface";
 
 class Agent extends BaseController {
   public storeRecentlyViewedData = async (req: Request) => {
@@ -22,6 +23,23 @@ class Agent extends BaseController {
         if (error) throw new Error("Unable to save recently viewed alert");
       });
     }
+  };
+
+  public getAgentList = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    return this.makeRequest(
+      async () => {
+        const agentList: AgentInterface[] = await AgentModel.find();
+        return {
+          data: agentList,
+        };
+      },
+      res,
+      next
+    );
   };
 }
 

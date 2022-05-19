@@ -1,4 +1,5 @@
 import e, { Request, Response, NextFunction } from "express";
+import { URLSearchParams } from "url";
 import {
   AlertInterface,
   AlertInterfaceList,
@@ -30,6 +31,7 @@ class Alert extends BaseController {
           }
         ).sort("date");
 
+        console.log(cleanedSortedAlertsList);
         return {
           data: cleanedSortedAlertsList,
         };
@@ -37,6 +39,32 @@ class Alert extends BaseController {
       res,
       next
     );
+  };
+
+  public changeAlertStatus = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    let decodedParams = new URLSearchParams(req.params.change_status_object);
+    const changeStatusAction = decodedParams.get("changeAction") as AlertStatus;
+    const alertsToChange: string[] = decodedParams!
+      .get("alertToChange")!
+      .split(",");
+    const alertsToChangeFromDb = await AlertModel.find({
+      patternId: {
+        $in: alertsToChange,
+      },
+    });
+
+    console.log("Change status action", changeStatusAction);
+    console.log("alerts to change params", alertsToChange);
+    console.log("alerts from db", alertsToChangeFromDb);
+
+    alertsToChangeFromDb.forEach((alert) => {
+      alert.status = changeStatusAction;
+      alert.save();
+    });
   };
 
   private getLastMonthDate = (newAlertDate: Date) => {

@@ -1,16 +1,24 @@
 import { AlertInterface } from "./Alert.interface";
 
+export enum AgentStatus {
+  Active = "active",
+  Inactive = "inactive",
+  Closed = "closed",
+}
+
 export interface AgentInterface {
   agentId: string;
+  userType: string;
   firstName: string;
   lastName: string;
-  username: string;
-  password: string;
-  recentlyViewedAlert: string[];
-  phone: string;
   email: string;
-  status: string;
+  phone: string;
+  status: AgentStatus;
   lastLogin: Date;
-  notifPref: string;
+  password: string;
+  isNotifText: boolean;
+  isNotifEmail: boolean;
+  recentlyViewedAlert: string[];
+  username: string;
   customFilter: string;
 }
