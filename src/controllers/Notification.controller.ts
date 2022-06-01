@@ -88,6 +88,22 @@ class Notification extends BaseController {
       });
     }
   };
+
+  public deleteNotification = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    console.log(req.params.notificationid);
+    const notificationId = req.params.notificationid.split(",");
+    notificationId.forEach((notif) => {
+      NotificationModel.deleteOne({ notificationId: notif }, function (err) {
+        if (err) {
+          throw new Error("Notification can't be deleted");
+        }
+      });
+    });
+  };
 }
 
 export default new Notification();

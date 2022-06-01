@@ -7,6 +7,7 @@ import AgentController from "./controllers/Agent.controller";
 import ChartController from "./controllers/Chart.controller";
 import NotificationController from "./controllers/Notification.controller";
 import CustomFilterController from "./controllers/CustomFilter.controller";
+import PatternController from "./controllers/Pattern.controller";
 
 connectDB();
 
@@ -76,10 +77,21 @@ router.get(
 );
 
 router.get(
-  `/api/v1/post_new_filter/:name/:location/:agent/:queue/:status/:type/:from/:to`,
+  `/api/v1/post_new_filter/:urlquery`,
   CustomFilterController.postNewFilter
 );
 
-app.use(router);
+router.get(`/api/v1/edit_filter/:urlquery`, CustomFilterController.editFilter);
+
+app.use(
+  router.get(
+    `/api/v1/delete_notification/:notificationid`,
+    NotificationController.deleteNotification
+  )
+);
+
+app.use(
+  router.get(`/api/v1/get_pattern_list`, PatternController.getPatternList)
+);
 
 export default app;
