@@ -81,6 +81,7 @@ class CustomFilter extends BaseController {
     console.log("from", new Date(from));
     console.log("to", new Date(to));
     console.log(to);
+    console.log("filter id", filterId);
 
     const filterToEdit = await CustomFilterModel.findOne({
       customFilterId: filterId,
@@ -96,6 +97,7 @@ class CustomFilter extends BaseController {
       filterToEdit.from = new Date(from);
       filterToEdit.to = new Date(to);
       filterToEdit.save();
+      console.log("here");
     }
   };
 }

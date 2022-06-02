@@ -31,7 +31,6 @@ class Alert extends BaseController {
           }
         ).sort("date");
 
-        console.log(cleanedSortedAlertsList);
         return {
           data: cleanedSortedAlertsList,
         };
