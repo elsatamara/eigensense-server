@@ -8,8 +8,9 @@ const customFilterSchema = new Schema<CustomFilterInterface>({
   queue: [String],
   status: [String],
   type: [String],
-  from: Date,
-  to: Date,
+  from: Date || null,
+  to: Date || null,
+  customFilterId: String,
 });
 
 const CustomFilterModel = model<CustomFilterInterface>(

@@ -36,6 +36,13 @@ class CustomFilter extends BaseController {
     let from = decodedParams.get("from");
     let to = decodedParams.get("to");
 
+    if (from == "null") {
+      from = null;
+    }
+    if (to == "null") {
+      to = null;
+    }
+
     const newFilter = new CustomFilterModel({
       customFilterId: Date.now().toString(),
       name: name,
@@ -48,9 +55,9 @@ class CustomFilter extends BaseController {
       to: to,
     });
 
-    console.log("here");
+    console.log("printing new filter", newFilter);
 
-    newFilter.save(function (err) {
+    await newFilter.save(function (err) {
       if (err) throw Error("Unable to create new entry");
     });
   };
@@ -69,7 +76,7 @@ class CustomFilter extends BaseController {
 
     console.log("from", new Date(from));
     console.log("to", new Date(to));
-    console.log(typeof to);
+    console.log(to);
 
     const filterToEdit = await CustomFilterModel.findOne({
       customFilterId: filterId,
