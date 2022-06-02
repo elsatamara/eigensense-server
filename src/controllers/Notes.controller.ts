@@ -13,7 +13,6 @@ class Notes extends BaseController {
         const notesList = await NotesDataModel.find({
           patternId: patternId,
         });
-        // console.log(notesList);
         return {
           data: notesList,
         };

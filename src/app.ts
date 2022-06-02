@@ -72,7 +72,7 @@ router.get(
 );
 
 router.get(
-  `/api/v1/delete_custom_filter/:name`,
+  `/api/v1/delete_custom_filter/:filterid`,
   CustomFilterController.deleteFilter
 );
 

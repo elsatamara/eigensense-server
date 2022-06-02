@@ -21,8 +21,12 @@ class CustomFilter extends BaseController {
   };
 
   public deleteFilter = async (req: Request) => {
-    console.log("hereee");
-    await CustomFilterModel.deleteOne({ name: req.params.name });
+    await CustomFilterModel.deleteOne(
+      { customFilterId: req.params.filterid },
+      function (err) {
+        if (err) throw Error("Unable to delete filter");
+      }
+    ).clone();
   };
 
   public postNewFilter = async (req: Request) => {
