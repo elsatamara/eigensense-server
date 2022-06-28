@@ -21,4 +21,5 @@ export interface AgentInterface {
   recentlyViewedAlert: string[];
   username: string;
   customFilter: string;
+  token: string;
 }

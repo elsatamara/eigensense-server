@@ -8,6 +8,7 @@ import ChartController from "./controllers/Chart.controller";
 import NotificationController from "./controllers/Notification.controller";
 import CustomFilterController from "./controllers/CustomFilter.controller";
 import PatternController from "./controllers/Pattern.controller";
+import SimilarPatternController from "./controllers/SimilarPattern.controller";
 
 connectDB();
 
@@ -24,6 +25,12 @@ app.get("/", (req, res) => {
 router.get(
   `/api/v1/postNotes/:patternId/:notesId/:date/:agent/:text`,
   NotesController.postNotes
+);
+
+router.get(`/api/v1/getchartdemo`, ChartController.getChartDemo);
+
+app.use(
+  router.get(`/api/v1/getanotherchartdemo`, ChartController.getAnotherChartDemo)
 );
 
 router.get(`/api/v1/deleteNote/:noteId/:patternId`, NotesController.deleteNote);
@@ -92,6 +99,20 @@ app.use(
 
 app.use(
   router.get(`/api/v1/get_pattern_list`, PatternController.getPatternList)
+);
+
+app.use(
+  router.get(
+    `/api/v1/get_similar_pattern_list`,
+    SimilarPatternController.getSimilarPatternList
+  )
+);
+
+app.use(
+  router.get(
+    `/api/v1/get_compare_chart/:patternName`,
+    ChartController.getCompareAlertChart
+  )
 );
 
 export default app;

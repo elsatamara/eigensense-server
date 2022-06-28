@@ -90,7 +90,7 @@ class Notes extends BaseController {
     }
   };
 
-  public addNoteIdOnAlert = async (noteID: string, patternId: string) => {
+  private addNoteIdOnAlert = async (noteID: string, patternId: string) => {
     let alertToUpdate = await AlertModel.findOne({ patternId: patternId });
     if (alertToUpdate) {
       alertToUpdate.notes.push(noteID);
@@ -103,7 +103,7 @@ class Notes extends BaseController {
     return "Alert is updated successfully!";
   };
 
-  public removeNoteIdOnAlert = async (noteID: string, patternId: string) => {
+  private removeNoteIdOnAlert = async (noteID: string, patternId: string) => {
     let alertToUpdate = await AlertModel.findOne({ patternId: patternId });
     if (alertToUpdate) {
       alertToUpdate.notes = alertToUpdate.notes.filter(

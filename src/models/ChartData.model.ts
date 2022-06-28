@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { ChartData } from "../interfaces/ChartData.interface";
 
 const chartDataSchema = new Schema<ChartData>({
-  DateTime: Date,
+  DateTime: String,
   Pressure: Number,
   RegName: String,
   temperature: Number,
@@ -25,6 +25,6 @@ const chartDataSchema = new Schema<ChartData>({
   dlerorr: Number,
 });
 
-const ChartDataModel = model<ChartData>("chartdemos", chartDataSchema);
+const ChartDataModel = model<ChartData>("outputalgos", chartDataSchema);
 
 export default ChartDataModel;

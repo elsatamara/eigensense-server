@@ -18,6 +18,7 @@ const agentSchema = new Schema<AgentInterface>({
   isNotifEmail: Boolean,
   customFilter: String,
   userType: String,
+  token: String,
 });
 
 const AgentModel = model<AgentInterface>("agentdatas", agentSchema);

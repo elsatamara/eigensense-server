@@ -17,6 +17,7 @@ const alertSchema = new Schema<AlertInterface>({
   preview: String,
   dateLastOpened: Date,
   notes: [String],
+  previewData: [Number],
 });
 
 const AlertModel = model<AlertInterface>("alertdemos", alertSchema);

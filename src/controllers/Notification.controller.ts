@@ -18,7 +18,6 @@ class Notification extends BaseController {
       async () => {
         const notificationList: NotificationInterface[] =
           await NotificationModel.find({}).sort("date");
-        console.log(notificationList);
         return {
           data: notificationList,
         };

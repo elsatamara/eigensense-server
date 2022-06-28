@@ -31,13 +31,35 @@ class Alert extends BaseController {
           }
         ).sort("date");
 
+        const addedPreviewDataList = await this.assignPreviewData(
+          cleanedSortedAlertsList
+        );
+
+        console.log(addedPreviewDataList);
+
         return {
-          data: cleanedSortedAlertsList,
+          data: addedPreviewDataList,
         };
       },
       res,
       next
     );
+  };
+
+  private assignPreviewData = async (alertList: AlertInterface[]) => {
+    const addedPreview = await Promise.all(
+      alertList.map(async (alert) => {
+        const lastMonthDate = this.getLastMonthDate(alert.date);
+        const previewData = await this.getOneMonthData(
+          lastMonthDate,
+          alert.date,
+          "reg_278"
+        );
+        alert.previewData = previewData;
+        return alert;
+      })
+    );
+    return addedPreview;
   };
 
   public changeAlertStatus = async (
@@ -67,9 +89,8 @@ class Alert extends BaseController {
   };
 
   private getLastMonthDate = (newAlertDate: Date) => {
-    let lastMonthDate = newAlertDate;
+    let lastMonthDate = new Date(newAlertDate);
     lastMonthDate.setMonth(newAlertDate.getMonth() - 1);
-    console.log("LAST MONTH", lastMonthDate);
     return lastMonthDate;
   };
 
@@ -78,24 +99,35 @@ class Alert extends BaseController {
     currDate: Date,
     regname: String
   ) => {
-    const objectArray = await ChartDataModel.find({
+    const data = await ChartDataModel.find({
       RegName: regname,
-      alertFlag: 1,
       DateTime: {
         $gte: lastMonthDate.toJSON().slice(0, 10),
         $lte: currDate.toJSON().slice(0, 10),
       },
+    }).then((previewData) => {
+      return previewData.map((elem) => elem.Pressure);
     });
-    console.log(objectArray);
-    let dates: Date[] = [];
-    let pressures: Number[] = [];
-    objectArray.forEach((elem) => {
-      dates.push(elem.DateTime);
-      pressures.push(elem.Pressure);
-    });
-    let datePressure = { dates: dates, pressures: pressures };
-    return datePressure;
+    return data;
   };
+
+  // public changeAgent = async (req: Request) => {
+  //   // let agentId = req.params.agentid;
+  //   console.log("here");
+  //   const files = await AlertModel.find();
+  //   let i = 0;
+  //   if (files) {
+  //     files.forEach((elem) => {
+  //       i += 1;
+  //       console.log(i);
+  //       if (i % 2 === 0) {
+  //         console.log("here");
+  //         elem.regulator = "CAR62355";
+  //         elem.save();
+  //       }
+  //     });
+  //   }
+  // };
 }
 
 export default new Alert();

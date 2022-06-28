@@ -1,5 +1,5 @@
 export interface ChartData {
-  DateTime: Date;
+  DateTime: string;
   Pressure: number;
   RegName: string;
   temperature: number;

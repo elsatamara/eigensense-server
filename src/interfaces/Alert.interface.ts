@@ -15,6 +15,7 @@ export interface AlertInterface {
   preview: string;
   dateLastOpened: Date;
   notes: string[];
+  previewData: number[];
 }
 
 export interface AlertInterfaceList {
