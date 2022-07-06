@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { AlertStatus } from "../controllers/utils/AlertStatus";
 
 export interface AlertInterface {
+  alert: Promise<number[]>;
   alertType: string;
   keyAttribute: string;
   alertQueue: string;
@@ -15,7 +16,7 @@ export interface AlertInterface {
   preview: string;
   dateLastOpened: Date;
   notes: string[];
-  previewData: number[];
+  previewData: (number | Date)[][];
 }
 
 export interface AlertInterfaceList {

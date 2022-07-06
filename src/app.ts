@@ -115,4 +115,13 @@ app.use(
   )
 );
 
+app.use(
+  router.get(
+    `/api/v1/get_similar_pattern_demo/:sequence`,
+    SimilarPatternController.getSimilarPatternAlgoResult
+  )
+);
+
+app.use(router.get(`/api/v1/get_chart_csv`, ChartController.getChartDemoCSV));
+
 export default app;

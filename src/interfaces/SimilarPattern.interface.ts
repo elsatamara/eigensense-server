@@ -11,3 +11,8 @@ export interface SimilarPatternInterface {
   alertType: string;
   keyAttribute: string;
 }
+
+export interface SimilarPatternAlgoInterface {
+  matchScore: number;
+  dataPoints: number[][];
+}

@@ -30,12 +30,9 @@ class Alert extends BaseController {
             },
           }
         ).sort("date");
-
         const addedPreviewDataList = await this.assignPreviewData(
           cleanedSortedAlertsList
         );
-
-        console.log(addedPreviewDataList);
 
         return {
           data: addedPreviewDataList,
@@ -105,9 +102,14 @@ class Alert extends BaseController {
         $gte: lastMonthDate.toJSON().slice(0, 10),
         $lte: currDate.toJSON().slice(0, 10),
       },
-    }).then((previewData) => {
-      return previewData.map((elem) => elem.Pressure);
-    });
+    })
+      .limit(1000)
+      .then((previewData) => {
+        return previewData.map((elem) => [
+          new Date(elem.DateTime).getTime(),
+          elem.Pressure,
+        ]);
+      });
     return data;
   };
 
