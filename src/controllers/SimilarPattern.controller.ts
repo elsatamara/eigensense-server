@@ -37,7 +37,6 @@ class SimilarPattern extends BaseController {
         const res: AxiosResponse<any> = await axios.get(
           "http://127.0.0.1:5000/"
         );
-        console.log(res.data);
         return { data: res.data };
       },
       res,
@@ -52,9 +51,7 @@ class SimilarPattern extends BaseController {
   ) => {
     return this.makeRequest(
       async () => {
-        console.log(req.params.sequence);
         let decodedParams = new URLSearchParams(req.params.sequence);
-        console.log(decodedParams);
         const algoCall: AxiosResponse<any> = await axios.get(
           `http://127.0.0.1:5000/similar-search/${decodedParams}`,
           { timeout: 300000 }
