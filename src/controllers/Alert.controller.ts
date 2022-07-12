@@ -31,64 +31,10 @@ class Alert extends BaseController {
           }
         ).sort("date");
 
-        const regulatorMap = new Map();
+        const res = await this.assignPreviewData(cleanedSortedAlertsList);
 
-        cleanedSortedAlertsList.forEach((elem) => {
-          if (regulatorMap.has(elem.regulator)) {
-            let timeArray = regulatorMap.get(elem.regulator);
-            timeArray[0] = Math.min(timeArray[0], elem.date.getTime());
-            timeArray[1] = Math.max(timeArray[1], elem.date.getTime());
-          } else {
-            regulatorMap.set(elem.regulator, [
-              elem.date.getTime(),
-              elem.date.getTime(),
-            ]);
-          }
-        });
-
-        const res = await Promise.all(
-          Array.from(regulatorMap.keys()).map(async (regulator) => {
-            const startDate = regulatorMap.get(regulator)[0];
-            const endDate = regulatorMap.get(regulator)[1];
-            const threeMonthsBefore = this.getLastThreeMonthDate(
-              new Date(startDate)
-            );
-            const threeMonthsData = await this.getRangeDateData(
-              threeMonthsBefore,
-              new Date(endDate),
-              "reg_278"
-            );
-            {
-              return [regulator, threeMonthsData];
-            }
-          })
-        );
-
-        // regulatorMap.forEach(async (value, key) => {
-        //   const regulatorName = key;
-        //   const startDate = value[0];
-        //   const endDate = new Date(value[1]);
-        //   const threeMonthsBefore = this.getLastThreeMonthDate(
-        //     new Date(startDate)
-        //   );
-        //   const threeMonthsData = await this.getRangeDateData(
-        //     threeMonthsBefore,
-        //     endDate,
-        //     "reg_278"
-        //   );
-        //   console.log(threeMonthsData);
-        //   regulatorMap.set(regulatorName, threeMonthsData);
-        // });
-
-        // console.log(regulatorMap);
-
-        // const addedPreviewDataList = await this.assignPreviewData(
-        //   cleanedSortedAlertsList
-        // );
-
-        console.log(res);
         return {
-          data: [cleanedSortedAlertsList, res],
+          data: res,
         };
       },
       res,
@@ -159,7 +105,7 @@ class Alert extends BaseController {
       },
     }).then((previewData) => {
       return previewData.map((elem) => [
-        new Date(elem.DateTime).getTime(),
+        new Date(elem.DateTime + " UTC").getTime(),
         elem.Pressure,
       ]);
     });
