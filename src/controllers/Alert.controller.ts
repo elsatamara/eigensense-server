@@ -1,4 +1,5 @@
 import e, { Request, Response, NextFunction } from "express";
+import { resolve } from "node:path/posix";
 import { URLSearchParams } from "url";
 import {
   AlertInterface,
@@ -11,6 +12,8 @@ import { AlertStatus } from "./utils/AlertStatus";
 
 class Alert extends BaseController {
   /** Loads a list of alerts, sorted from the oldest from DB */
+  savedRegulatorMap: Map<string, number[]> = new Map();
+
   public getAlertsList = async (
     req: Request,
     res: Response,
@@ -31,38 +34,28 @@ class Alert extends BaseController {
           }
         ).sort("date");
 
-        const regulatorMap = new Map();
-
-        cleanedSortedAlertsList.forEach((elem) => {
-          if (regulatorMap.has(elem.regulator)) {
-            let timeArray = regulatorMap.get(elem.regulator);
-            timeArray[0] = Math.min(timeArray[0], elem.date.getTime());
-            timeArray[1] = Math.max(timeArray[1], elem.date.getTime());
-          } else {
-            regulatorMap.set(elem.regulator, [
-              elem.date.getTime(),
-              elem.date.getTime(),
-            ]);
-          }
-        });
-
-        const res = await Promise.all(
-          Array.from(regulatorMap.keys()).map(async (regulator) => {
-            const startDate = regulatorMap.get(regulator)[0];
-            const endDate = regulatorMap.get(regulator)[1];
-            const threeMonthsBefore = this.getLastThreeMonthDate(
-              new Date(startDate)
-            );
-            const threeMonthsData = await this.getRangeDateData(
-              threeMonthsBefore,
-              new Date(endDate),
-              "reg_278"
-            );
-            {
-              return [regulator, threeMonthsData];
-            }
-          })
+        this.setRegulatorMap(cleanedSortedAlertsList);
+        const addedPreviewDataList = await this.assignPreviewData(
+          cleanedSortedAlertsList
         );
+
+        // const res = await Promise.all(
+        //   Array.from(regulatorMap.keys()).map(async (regulator) => {
+        //     const startDate = regulatorMap.get(regulator)[0];
+        //     const endDate = regulatorMap.get(regulator)[1];
+        //     const threeMonthsBefore = this.getLastThreeMonthDate(
+        //       new Date(startDate)
+        //     );
+        //     const threeMonthsData = await this.getRangeDateData(
+        //       threeMonthsBefore,
+        //       new Date(endDate),
+        //       "reg_278"
+        //     );
+        //     {
+        //       return [regulator, threeMonthsData];
+        //     }
+        //   })
+        // );
 
         // regulatorMap.forEach(async (value, key) => {
         //   const regulatorName = key;
@@ -86,14 +79,63 @@ class Alert extends BaseController {
         //   cleanedSortedAlertsList
         // );
 
-        console.log(res);
+        // console.log(res);
         return {
-          data: [cleanedSortedAlertsList, res],
+          data: addedPreviewDataList,
         };
       },
       res,
       next
     );
+  };
+
+  public getChartData = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    return this.makeRequest(
+      async () => {
+        console.log("THIS", this.savedRegulatorMap);
+        const regulator = req.params.regulator;
+        const timeRange: number[] = this.savedRegulatorMap.get(regulator)!;
+        console.log(timeRange);
+        const threeMonthsBefore = this.getLastThreeMonthDate(
+          new Date(timeRange[0])
+        );
+        console.log(threeMonthsBefore);
+        const threeMonthsData = await this.getRangeDateData(
+          threeMonthsBefore,
+          new Date(timeRange[1]),
+          "reg_278"
+        );
+        console.log("HEREEE");
+        console.log("gggg", threeMonthsData);
+        return {
+          data: threeMonthsData,
+        };
+      },
+      res,
+      next
+    );
+  };
+
+  private setRegulatorMap = (cleanedSortedAlertsList: AlertInterface[]) => {
+    let regulatorMap = new Map();
+    cleanedSortedAlertsList.forEach((elem) => {
+      if (regulatorMap.has(elem.regulator)) {
+        let timeArray = regulatorMap.get(elem.regulator);
+        timeArray[0] = Math.min(timeArray[0], elem.date.getTime());
+        timeArray[1] = Math.max(timeArray[1], elem.date.getTime());
+      } else {
+        regulatorMap.set(elem.regulator, [
+          elem.date.getTime(),
+          elem.date.getTime(),
+        ]);
+      }
+    });
+    this.savedRegulatorMap = regulatorMap;
+    console.log(this.savedRegulatorMap);
   };
 
   private assignPreviewData = async (alertList: AlertInterface[]) => {
@@ -151,6 +193,8 @@ class Alert extends BaseController {
   };
 
   private getRangeDateData = async (from: Date, to: Date, regname: String) => {
+    console.log("from", from);
+    console.log("to", to);
     const data = await ChartDataModel.find({
       RegName: regname,
       DateTime: {
@@ -163,26 +207,9 @@ class Alert extends BaseController {
         elem.Pressure,
       ]);
     });
+    console.log("DATA", data);
     return data;
   };
-
-  // public changeAgent = async (req: Request) => {
-  //   // let agentId = req.params.agentid;
-  //   console.log("here");
-  //   const files = await AlertModel.find();
-  //   let i = 0;
-  //   if (files) {
-  //     files.forEach((elem) => {
-  //       i += 1;
-  //       console.log(i);
-  //       if (i % 2 === 0) {
-  //         console.log("here");
-  //         elem.regulator = "CAR62355";
-  //         elem.save();
-  //       }
-  //     });
-  //   }
-  // };
 }
 
 export default new Alert();

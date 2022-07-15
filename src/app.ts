@@ -27,7 +27,7 @@ router.get(
   NotesController.postNotes
 );
 
-router.get(`/api/v1/getchartdemo`, ChartController.getChartDemo);
+router.get(`/api/v1/getchartdata/:regulator`, AlertController.getChartData);
 
 app.use(
   router.get(`/api/v1/getanotherchartdemo`, ChartController.getAnotherChartDemo)
