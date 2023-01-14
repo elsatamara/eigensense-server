@@ -51,12 +51,13 @@ class SimilarPattern extends BaseController {
   ) => {
     return this.makeRequest(
       async () => {
-        let decodedParams = new URLSearchParams(req.params.sequence);
-        const algoCall: AxiosResponse<any> = await axios.get(
-          `http://127.0.0.1:5000/similar-search/${decodedParams}`,
-          { timeout: 300000 }
-        );
-        const res: SimilarPatternInterface[] = algoCall.data[0].map(
+        let decodedParams = req.body.data
+        // const algoCall: any = await this.getSimilarPatternHelper(decodedParams)
+        const { data } = await axios.post(
+          `http://127.0.0.1:5000/similar-search`,
+          {data: decodedParams},
+        )
+        const res: SimilarPatternInterface[] = data[0].map(
           (data: any) => {
             return <SimilarPatternAlgoInterface>{
               matchScore: data[0],

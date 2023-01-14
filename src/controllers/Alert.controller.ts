@@ -80,6 +80,7 @@ class Alert extends BaseController {
         // );
 
         // console.log(res);
+        console.log("HERE", addedPreviewDataList)
         return {
           data: addedPreviewDataList,
         };

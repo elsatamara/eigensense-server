@@ -116,7 +116,7 @@ app.use(
 );
 
 app.use(
-  router.get(
+  router.post(
     `/api/v1/get_similar_pattern_demo/:sequence`,
     SimilarPatternController.getSimilarPatternAlgoResult
   )
